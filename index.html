@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garuda's Compassion — A Tale from the Garuda Purana</title>
+<meta name="description" content="A parrot, a god's gaze, and the wings that carried destiny forward. From the Garuda Purana.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+:root {
+  --bg:       #07050e;
+  --bg2:      #0c0918;
+  --ink:      #e8dfc8;
+  --ink-dim:  #9a9080;
+  --gold:     #d4a855;
+  --gold2:    #f0c96e;
+  --crimson:  #9b2335;
+  --teal:     #2a7a6e;
+  --teal2:    #3db89f;
+  --saffron:  #c96820;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Lora', serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+#cur, #cur2 {
+  position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+}
+#cur  { width:10px; height:10px; background: var(--gold); }
+#cur2 { width:36px; height:36px; border:1px solid rgba(212,168,85,.4); transition: all .3s ease; }
+
+/* ── PROGRESS ── */
+#prog {
+  position: fixed; top:0; left:0; height:2px; width:0%;
+  background: linear-gradient(90deg, var(--crimson), var(--gold), var(--teal2));
+  z-index: 8000; transition: width .1s linear;
+}
+
+/* ── PRELOADER ── */
+#loader {
+  position: fixed; inset: 0; background: var(--bg); z-index: 9000;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+}
+.load-symbol {
+  font-family: 'Cinzel', serif; font-size: clamp(5rem,13vw,9rem); color: var(--gold);
+  opacity:0; filter:blur(24px); line-height:1;
+}
+.load-bar { width:0; height:1px; background: linear-gradient(90deg,transparent,var(--gold),transparent); max-width:280px; }
+.load-text {
+  font-family: 'Lora', serif; font-style: italic; font-size:.85rem;
+  color: var(--ink-dim); letter-spacing:.35em; opacity:0;
+}
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  position:relative; overflow:hidden; padding:2rem;
+}
+.hero-bg {
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 80% 70% at 50% 60%, #130b22 0%, #07050e 75%);
+}
+#starfield { position:absolute; inset:0; overflow:hidden; }
+.star { position:absolute; border-radius:50%; background:#fff; }
+
+.hero-kailash {
+  position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+  width:min(900px,100vw); opacity:0;
+}
+.hc { position:relative; z-index:10; text-align:center; max-width:820px; }
+.h-eyebrow {
+  font-family:'Cinzel',serif; font-size:clamp(.55rem,1.1vw,.72rem);
+  letter-spacing:.55em; color:var(--gold); text-transform:uppercase;
+  opacity:0; margin-bottom:1.8rem;
+}
+.h-title {
+  font-family:'Playfair Display',serif; font-weight:900;
+  font-size:clamp(2.6rem,7.5vw,6.5rem); line-height:1.02;
+  color:var(--ink); opacity:0;
+  text-shadow: 0 0 80px rgba(212,168,85,.15);
+}
+.h-title .gold { color:var(--gold); display:block; }
+.h-sub {
+  font-family:'Lora',serif; font-style:italic;
+  font-size:clamp(1rem,2.2vw,1.35rem); color:var(--ink-dim);
+  line-height:1.7; opacity:0; margin:1.6rem 0 2.8rem;
+}
+.h-rule { display:flex; align-items:center; gap:1rem; justify-content:center; opacity:0; margin-bottom:2rem; }
+.h-rule span { width:70px; height:1px; }
+.h-rule span:first-child { background:linear-gradient(90deg,transparent,var(--gold)); }
+.h-rule span:last-child  { background:linear-gradient(90deg,var(--gold),transparent); }
+.h-rule em { color:var(--gold); font-style:normal; font-size:1.1rem; }
+
+.scroll-down {
+  position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:.6rem;
+  opacity:0; font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.4em; color:var(--ink-dim);
+}
+.sd-line { width:1px; height:48px; background:linear-gradient(to bottom,var(--gold),transparent); animation:sdpulse 2s ease-in-out infinite; }
+@keyframes sdpulse { 0%,100%{opacity:.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.15)} }
+
+/* ── CHAPTER DIVIDERS ── */
+.chapter-div {
+  display:flex; align-items:center; justify-content:center;
+  gap:2rem; padding:5rem 2rem 4rem;
+}
+.cdiv-line { flex:1; max-width:200px; height:1px; background:linear-gradient(90deg,transparent,rgba(212,168,85,.25)); opacity:0; }
+.cdiv-line.r { background:linear-gradient(90deg,rgba(212,168,85,.25),transparent); }
+.cdiv-label {
+  font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.55em;
+  color:rgba(212,168,85,.5); text-transform:uppercase; opacity:0; white-space:nowrap;
+}
+
+/* ── STORY SECTIONS ── */
+.scene {
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  padding:5rem 2rem; position:relative; overflow:hidden;
+}
+.scene-bg { position:absolute; inset:0; pointer-events:none; }
+#s1 .scene-bg { background: radial-gradient(ellipse 70% 60% at 35% 50%, #0f1820 0%, var(--bg) 70%); }
+#s2 .scene-bg { background: radial-gradient(ellipse 70% 60% at 65% 50%, #1a1008 0%, var(--bg) 70%); }
+#s3 .scene-bg { background: radial-gradient(ellipse 70% 60% at 40% 50%, #080f18 0%, var(--bg) 70%); }
+#s4 .scene-bg { background: radial-gradient(ellipse 70% 60% at 60% 50%, #0a0a18 0%, var(--bg) 70%); }
+#s5 .scene-bg { background: radial-gradient(ellipse 70% 60% at 50% 50%, #0d1208 0%, var(--bg) 70%); }
+#s6 .scene-bg { background: radial-gradient(ellipse 70% 60% at 50% 50%, #180808 0%, var(--bg) 70%); }
+
+.scene-wrap { position:relative; z-index:5; max-width:760px; width:100%; margin:0 auto; }
+
+/* Scene tag */
+.s-tag {
+  font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.5em; color:var(--gold);
+  text-transform:uppercase; opacity:0; margin-bottom:2.5rem;
+  display:flex; align-items:center; gap:.8rem;
+}
+.s-tag::before { content:''; display:block; width:36px; height:1px; background:var(--gold); flex-shrink:0; }
+
+/* Illustration panel */
+.illus {
+  width:100%; height:clamp(180px,32vw,380px);
+  margin-bottom:3rem; position:relative;
+  border:1px solid rgba(212,168,85,.12);
+  overflow:hidden; opacity:0;
+}
+.illus canvas { display:block; width:100%; height:100%; }
+.illus-cap {
+  position:absolute; bottom:.8rem; right:1rem;
+  font-family:'Lora',serif; font-style:italic;
+  font-size:.7rem; color:rgba(212,168,85,.4); letter-spacing:.15em;
+}
+
+/* Pull quote */
+.pq {
+  font-family:'Playfair Display',serif; font-style:italic;
+  font-size:clamp(1.4rem,3.2vw,2.2rem); line-height:1.5;
+  color:var(--gold2); opacity:0; margin-bottom:2.5rem;
+  padding-left:1.4rem; border-left:2px solid var(--crimson);
+}
+
+/* Body */
+.bt {
+  font-size:clamp(1.05rem,1.7vw,1.2rem); line-height:2;
+  color:var(--ink); font-weight:400; opacity:0;
+}
+.bt p { margin-bottom:1.6em; }
+.bt p:last-child { margin-bottom:0; }
+.hi { color:var(--gold); font-weight:500; }
+.di { color:var(--teal2); font-style:italic; }
+.cr { color:var(--crimson); }
+.wh { color:var(--ink-dim); font-style:italic; }
+.dialog { 
+  display:block; margin:1.2em 0; padding:.8em 1.2em;
+  border-left:2px solid rgba(212,168,85,.3);
+  font-style:italic; color:var(--ink-dim);
+  font-size:1.05em;
+}
+
+/* ── REVELATION PANEL ── */
+.revelation {
+  background: linear-gradient(135deg, rgba(155,35,53,.08) 0%, rgba(212,168,85,.05) 100%);
+  border:1px solid rgba(155,35,53,.2); padding:2rem 2.2rem;
+  margin:2rem 0; opacity:0;
+}
+.revelation p { margin:0; font-style:italic; line-height:2; font-size:1.1em; }
+
+/* ── MORAL ── */
+#moral {
+  min-height:90vh; display:flex; align-items:center; justify-content:center;
+  padding:5rem 2rem; position:relative; overflow:hidden;
+  background: radial-gradient(ellipse 80% 70% at 50% 50%, #110910 0%, var(--bg) 70%);
+}
+.moral-inner { text-align:center; max-width:680px; position:relative; z-index:5; }
+.moral-title {
+  font-family:'Cinzel',serif; font-size:clamp(.65rem,1.2vw,.8rem);
+  letter-spacing:.6em; color:var(--gold); text-transform:uppercase;
+  opacity:0; margin-bottom:2.5rem;
+}
+.moral-quote {
+  font-family:'Playfair Display',serif; font-style:italic;
+  font-size:clamp(1.5rem,3.5vw,2.6rem); line-height:1.6;
+  color:var(--ink); opacity:0;
+}
+.moral-quote .line { display:block; overflow:hidden; }
+.moral-quote .line span { display:block; transform:translateY(110%); }
+.moral-body {
+  font-family:'Lora',serif; font-size:clamp(.95rem,1.5vw,1.1rem);
+  line-height:2; color:var(--ink-dim); opacity:0; margin-top:2.5rem;
+}
+.moral-body strong { color:var(--gold); font-weight:500; }
+.moral-glow {
+  position:absolute; inset:0; pointer-events:none;
+  background: radial-gradient(circle at 50% 50%, rgba(212,168,85,.05) 0%, transparent 60%);
+}
+
+/* ── COLOPHON ── */
+footer {
+  padding:3rem 2rem; text-align:center;
+  border-top:1px solid rgba(212,168,85,.08);
+}
+footer p {
+  font-family:'Lora',serif; font-size:.8rem;
+  color:rgba(154,144,128,.35); letter-spacing:.2em; line-height:2.2;
+}
+footer span { color:rgba(212,168,85,.5); }
+
+/* ── FLOATING PARTICLES ── */
+.fp { position:fixed; pointer-events:none; z-index:40; border-radius:50%; opacity:0; }
+
+@media(max-width:768px){
+  .illus { height:180px; }
+  .h-title { font-size:clamp(2.2rem,9vw,3.5rem); }
+  .pq { font-size:clamp(1.2rem,4.5vw,1.7rem); }
+}
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--gold); border-radius:2px; }
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+<div id="prog"></div>
+
+<!-- PRELOADER -->
+<div id="loader">
+  <div class="load-symbol">ॐ</div>
+  <div class="load-bar"></div>
+  <div class="load-text">Garuda Purana · A Tale of Destiny</div>
+</div>
+
+<!-- ════════════════════════════════════
+     HERO
+════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div id="starfield"></div>
+
+  <!-- Kailash SVG -->
+  <svg class="hero-kailash" viewBox="0 0 900 320" fill="none" xmlns="http://www.w3.org/2000/svg" id="kailashSVG">
+    <!-- Snow peaks -->
+    <polygon points="450,10 350,160 550,160" fill="#0f0c1a" opacity=".9"/>
+    <polygon points="450,10 390,100 510,100" fill="#1a1530" opacity=".8"/>
+    <polygon points="200,60 100,200 310,200" fill="#0c0918" opacity=".85"/>
+    <polygon points="690,80 590,200 790,200" fill="#0c0918" opacity=".85"/>
+    <polygon points="100,120 0,250 210,250" fill="#080614" opacity=".9"/>
+    <polygon points="790,130 680,260 900,260" fill="#080614" opacity=".9"/>
+    <!-- Snow caps -->
+    <polygon points="450,10 420,60 480,60" fill="#1e1a35" opacity=".7"/>
+    <polygon points="200,60 180,100 225,100" fill="#1a1730" opacity=".6"/>
+    <!-- Ground -->
+    <rect x="0" y="250" width="900" height="70" fill="#07050e"/>
+    <ellipse cx="450" cy="260" rx="450" ry="30" fill="#09070f"/>
+    <!-- Temple gate hint -->
+    <rect x="415" y="200" width="70" height="60" fill="#0d0a1a" rx="2"/>
+    <polygon points="430,200 450,175 470,200" fill="#0d0a1a"/>
+    <!-- Torches -->
+    <rect x="390" y="220" width="4" height="30" fill="#1a1020"/>
+    <rect x="506" y="220" width="4" height="30" fill="#1a1020"/>
+    <!-- Torch flames (animated via JS) -->
+    <ellipse id="fl1" cx="392" cy="216" rx="4" ry="6" fill="rgba(212,100,20,.7)"/>
+    <ellipse id="fl2" cx="508" cy="216" rx="4" ry="6" fill="rgba(212,100,20,.7)"/>
+  </svg>
+
+  <div class="hc">
+    <p class="h-eyebrow">Garuda Purana · Prarabdha Karma</p>
+    <h1 class="h-title">
+      Garuda's<br>
+      <span class="gold">Compassion</span>
+    </h1>
+    <p class="h-sub">
+      A parrot. A god's startled gaze.<br>
+      And the wings that, in mercy, carried fate to its appointed place.
+    </p>
+    <div class="h-rule"><span></span><em>✦</em><span></span></div>
+  </div>
+  <div class="scroll-down"><span>Scroll</span><div class="sd-line"></div></div>
+</section>
+
+<!-- ── Chapter 1 ── -->
+<div class="chapter-div" id="cd1">
+  <div class="cdiv-line"></div>
+  <div class="cdiv-label">I &nbsp;·&nbsp; Mount Kailash</div>
+  <div class="cdiv-line r"></div>
+</div>
+
+<section class="scene" id="s1">
+  <div class="scene-bg"></div>
+  <div class="scene-wrap">
+    <div class="s-tag">Scene One &nbsp;·&nbsp; The Waiting Eagle</div>
+    <div class="illus" id="i1" data-caption="Mount Kailash · the abode of Shiva">
+      <canvas id="c1"></canvas><div class="illus-cap">The gate of Kailash</div>
+    </div>
+    <blockquote class="pq">
+      "Even the greatest serve patiently<br>at the threshold of the divine."
+    </blockquote>
+    <div class="bt">
+      <p>
+        On a morning that shone like polished silver, <span class="hi">Lord Vishnu</span> — Preserver of the Universe, blue as the deep sky after rain — rose from his cosmic rest and set out for <span class="hi">Mount Kailash</span>, the silver throne of Lord Shiva.
+      </p>
+      <p>
+        His beloved vehicle and devoted servant, <span class="hi">Garuda</span> — the great eagle-god, king of all birds, whose wings could scatter storm clouds — waited respectfully outside the heavenly gate while the two great lords met inside.
+      </p>
+      <p>
+        Garuda sat on a stone pillar, his golden wings folded, his sharp amber eyes wandering across the mountainside. The air at Kailash was different — cool, thin, luminous, as though the sky itself held its breath.
+      </p>
+      <p>
+        Then he noticed it: perched on a branch of a small tree near the gate, <span class="wh">a tiny parrot</span>. Emerald-green, red-chinned, perfectly still. It sang a quiet note to itself. It preened one wing. It blinked at Garuda with the casual confidence of a creature that does not yet know the word <em>danger</em>.
+      </p>
+      <p>
+        <span class="wh">Garuda smiled. Even in the court of gods, small beautiful things found their way.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Chapter 2 ── -->
+<div class="chapter-div" id="cd2">
+  <div class="cdiv-line"></div>
+  <div class="cdiv-label">II &nbsp;·&nbsp; The Gaze of Yama</div>
+  <div class="cdiv-line r"></div>
+</div>
+
+<section class="scene" id="s2">
+  <div class="scene-bg"></div>
+  <div class="scene-wrap">
+    <div class="s-tag">Scene Two &nbsp;·&nbsp; The Startled God</div>
+    <div class="illus" id="i2" data-caption="Yamraj arrives at Kailash">
+      <canvas id="c2"></canvas><div class="illus-cap">The Lord of Death</div>
+    </div>
+    <blockquote class="pq">
+      "It was not the look of a hunter spotting prey.<br>
+      It was the look of a man who cannot believe his own ledger."
+    </blockquote>
+    <div class="bt">
+      <p>
+        After some time, the heavy air shifted. The mountain's birds fell silent. The gate's torches bent without wind.
+      </p>
+      <p>
+        <span class="hi">Yamraj</span> — God of Death, Keeper of Dharma, dark-crowned and riding his great buffalo — arrived at Kailash for his own appointment with Lord Shiva. He walked with the unhurried calm of one for whom time is not a river but a ledger.
+      </p>
+      <p>
+        As he passed through the gate, something made him stop.
+      </p>
+      <p>
+        He turned. His eyes fell on the small parrot on the branch. And then — something <span class="cr">extraordinary</span>. The God of Death, who has witnessed the end of ten thousand universes, who does not blink at kings or mountains, looked at this tiny bird with an expression that Garuda could only describe as <span class="hi">pure surprise</span>. His brow furrowed. He shook his head slowly, as a man does when confronted with an impossible puzzle, and walked inside.
+      </p>
+      <p>
+        <span class="wh">The whole encounter had lasted four seconds.</span>
+      </p>
+      <p>
+        Garuda's heart tightened. In his long life, he had never seen Yama surprised. Yama did not do surprise. Yama knew. Yama always knew. 
+      </p>
+      <p>
+        <span class="dialog">"Something is wrong,"</span> Garuda thought. <span class="dialog">"That look could only mean one thing — this little parrot's time is very nearly up."</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Chapter 3 ── -->
+<div class="chapter-div" id="cd3">
+  <div class="cdiv-line"></div>
+  <div class="cdiv-label">III &nbsp;·&nbsp; The Act of Mercy</div>
+  <div class="cdiv-line r"></div>
+</div>
+
+<section class="scene" id="s3">
+  <div class="scene-bg"></div>
+  <div class="scene-wrap">
+    <div class="s-tag">Scene Three &nbsp;·&nbsp; Wings of Compassion</div>
+    <div class="illus" id="i3" data-caption="Garuda takes flight across the world">
+      <canvas id="c3"></canvas><div class="illus-cap">Mercy at the speed of storm</div>
+    </div>
+    <blockquote class="pq">
+      "He acted the way the truly compassionate act —<br>
+      immediately, without hesitation, without asking whether he could."
+    </blockquote>
+    <div class="bt">
+      <p>
+        Garuda did not deliberate. Compassion in the great do not wait for reason. He stepped down from the pillar, walked to the little tree, and <span class="hi">cupped the parrot gently in his enormous golden hands</span>. The bird looked up at him with bright, unafraid eyes.
+      </p>
+      <p>
+        Then Garuda spread his wings.
+      </p>
+      <p>
+        The wingspan of Garuda is said to stretch from one horizon to another. When he flies, entire weather systems move aside. In a single beat of his wings, he crossed mountain ranges. In three beats, he crossed oceans. The clouds below him turned into a white carpet and then disappeared.
+      </p>
+      <p>
+        He was searching in his mind for the safest place in all creation — somewhere <span class="hi">Death could not easily reach</span>. Far. Isolated. Hidden. He thought of a deep forest he had once flown over, in a land thousands of miles from Kailash, where the trees grew so thick that sunlight itself arrived in pieces.
+      </p>
+      <p>
+        There, in a cliff face at the forest's edge, he found what he was looking for: <span class="di">a small crevice in the rock</span>, dark and deep, invisible to any eye above. He placed the parrot inside with infinite care, nestled between two dry stones.
+      </p>
+      <p>
+        <span class="dialog">"Stay here, little one. You are safe. No predator will find you. No eye will reach you here."</span>
+      </p>
+      <p>
+        He stepped back and looked at the hidden crevice. <span class="wh">Satisfied. Certain. The quiet pride of someone who has done a good thing.</span>
+      </p>
+      <p>
+        Then Garuda turned and flew back to Kailash.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Chapter 4 ── -->
+<div class="chapter-div" id="cd4">
+  <div class="cdiv-line"></div>
+  <div class="cdiv-label">IV &nbsp;·&nbsp; The Question</div>
+  <div class="cdiv-line r"></div>
+</div>
+
+<section class="scene" id="s4">
+  <div class="scene-bg"></div>
+  <div class="scene-wrap">
+    <div class="s-tag">Scene Four &nbsp;·&nbsp; Garuda Asks</div>
+    <div class="illus" id="i4" data-caption="Garuda before Yamraj — the question">
+      <canvas id="c4"></canvas><div class="illus-cap">The conversation at the gate</div>
+    </div>
+    <blockquote class="pq">
+      "He had saved the parrot. Now he wanted to understand<br>
+      what he had saved it from."
+    </blockquote>
+    <div class="bt">
+      <p>
+        When Yamraj emerged from his meeting and walked back through the gate, Garuda was waiting. He bowed respectfully — even the great bow before the just — and asked his question with careful humility:
+      </p>
+      <p>
+        <span class="dialog">"Lord Yamraj, forgive my curiosity. When you arrived this morning, you stopped and looked at the small parrot near the gate. You seemed… surprised. I have never seen you surprised. May I ask — what did you see?"</span>
+      </p>
+      <p>
+        Yamraj paused. He looked at Garuda with those ancient, measuring eyes. Then he answered, calmly, the way a man answers when the answer is simply the truth and requires no decoration:
+      </p>
+      <p>
+        <span class="dialog">"I was surprised because, according to the records of destiny I carry, that parrot was fated to die this very hour — eaten by a python, in a forest crevice, thousands of miles from here. When I saw the bird sitting calmly at Kailash, I could not understand how it would travel that distance in time. I shook my head because the numbers did not add up."</span>
+      </p>
+      <p>
+        Yamraj looked at Garuda. A long moment.
+      </p>
+      <p>
+        <span class="dialog">"Now I understand."</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Chapter 5 ── -->
+<div class="chapter-div" id="cd5">
+  <div class="cdiv-line"></div>
+  <div class="cdiv-label">V &nbsp;·&nbsp; The Revelation</div>
+  <div class="cdiv-line r"></div>
+</div>
+
+<section class="scene" id="s5">
+  <div class="scene-bg"></div>
+  <div class="scene-wrap">
+    <div class="s-tag">Scene Five &nbsp;·&nbsp; The Unbearable Truth</div>
+    <div class="illus" id="i5" data-caption="The python in the rock crevice">
+      <canvas id="c5"></canvas><div class="illus-cap">Fate's appointed room</div>
+    </div>
+    <blockquote class="pq">
+      "It was not cruelty. It was not a mistake.<br>
+      It was the shape of what was always going to happen."
+    </blockquote>
+    <div class="bt">
+      <p>
+        Garuda went very still.
+      </p>
+      <p>
+        The forest crevice. The dark cleft between two stones. The place he had chosen because it seemed hidden, safe, invisible.
+      </p>
+      <p>
+        <span class="wh">The python had been there first.</span>
+      </p>
+      <div class="revelation">
+        <p>
+          In trying to save the parrot from death, Garuda had become the very instrument of its fate. His wings — those magnificent, storm-scattering wings that could cross oceans in three beats — had carried the small bird across thousands of miles and placed it, with infinite tenderness, into the exact crevice where the snake was waiting. Death had not chased the parrot. <span class="hi">Garuda had delivered it.</span>
+        </p>
+      </div>
+      <p>
+        <span class="dialog">"You carried it there yourself,"</span> said Yamraj, without cruelty, without satisfaction. The way a physician states a diagnosis. <span class="dialog">"In your compassion, you fulfilled the very destiny you sought to prevent. The record was always correct. Only the method was unknown — until now."</span>
+      </p>
+      <p>
+        Yamraj nodded once, as if closing a completed account, and walked on into the eternal road that passes through all worlds.
+      </p>
+      <p>
+        Garuda stood at the gate of Kailash for a long time, his great wings folded, <span class="wh">looking at the small tree where the parrot had been sitting, which was now empty, as it was always going to be.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Chapter 6 ── -->
+<div class="chapter-div" id="cd6">
+  <div class="cdiv-line"></div>
+  <div class="cdiv-label">VI &nbsp;·&nbsp; What Garuda Understood</div>
+  <div class="cdiv-line r"></div>
+</div>
+
+<section class="scene" id="s6">
+  <div class="scene-bg"></div>
+  <div class="scene-wrap">
+    <div class="s-tag">Scene Six &nbsp;·&nbsp; The Still Eagle</div>
+    <div class="illus" id="i6" data-caption="Garuda at the gate, alone">
+      <canvas id="c6"></canvas><div class="illus-cap">After knowledge</div>
+    </div>
+    <blockquote class="pq">
+      "He had not saved the parrot.<br>
+      He had loved it. That, perhaps,<br>was not nothing."
+    </blockquote>
+    <div class="bt">
+      <p>
+        There is a question the Garuda Purana quietly asks after this story: <span class="hi">Was Garuda wrong to try?</span>
+      </p>
+      <p>
+        The sages who retell this story do not say he was. Garuda acted from <span class="di">pure compassion</span>. He saw a creature in potential danger and he moved — immediately, powerfully, selflessly. That the outcome was woven before he ever lifted a feather does not make his impulse false. It makes it human. Divine, even, in its helplessness.
+      </p>
+      <p>
+        What the story teaches is not: <em>do not try</em>. 
+      </p>
+      <p>
+        What it teaches is this: <span class="hi">effort belongs to us. Outcome belongs to karma.</span> We act with full sincerity and full love — and we release the result. The archer draws the bow with all their skill. Where the arrow finally lands is not the archer's kingdom.
+      </p>
+      <p>
+        <span class="wh">Prarabdha karma</span> — the karma already set in motion, already in flight — cannot be recalled. Not by the love of eagles. Not by the compassion of gods. The wheel turns where it was always turning.
+      </p>
+      <p>
+        Garuda returned to his pillar outside the gate and waited for Lord Vishnu, as he always did. But from that morning, those who knew him said there was something different in the way he held his wings — <span class="hi">a certain lightness</span>, as if he had set down a great weight he had not known he was carrying. The weight of believing that love, if large enough, could rewrite what is written.
+      </p>
+      <p>
+        <span class="wh">Perhaps that is the real mercy the story offers — not a way to escape fate, but a way to make peace with it.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ MORAL ════ -->
+<section id="moral">
+  <div class="moral-glow"></div>
+  <div class="moral-inner">
+    <div class="moral-title">The Teaching · Garuda Purana</div>
+    <div class="moral-quote" id="mq">
+      <span class="line"><span>Destiny cannot be outflown.</span></span>
+      <span class="line"><span>Not even by Garuda's wings.</span></span>
+      <span class="line"><span>&nbsp;</span></span>
+      <span class="line"><span>Act with love. Act with full force.</span></span>
+      <span class="line"><span>Then let the outcome go.</span></span>
+    </div>
+    <div class="moral-body" id="mb">
+      <p>
+        <strong>Prarabdha Karma</strong> — the portion of karma already in motion — cannot be altered by action, however well-intentioned. What we control is the sincerity of our effort and the purity of our motive. What we do not control is the final shape of things.
+      </p>
+      <p>
+        Sometimes, running from fate carries us toward it. <strong>The only freedom</strong> is not in the outcome, but in the quality of presence we bring to each moment before the outcome arrives.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════ -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ── CURSOR ── */
+const cur = document.getElementById('cur'), cur2 = document.getElementById('cur2');
+window.addEventListener('mousemove', e => {
+  gsap.to(cur,  { x: e.clientX, y: e.clientY, duration: .08 });
+  gsap.to(cur2, { x: e.clientX, y: e.clientY, duration: .35 });
+});
+
+/* ── PROGRESS ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('prog').style.width =
+    (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+});
+
+/* ── STARS ── */
+(function(){
+  const sf = document.getElementById('starfield');
+  for(let i=0;i<80;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random()*2+.5;
+    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;opacity:${Math.random()*.5+.1}`;
+    sf.appendChild(s);
+    gsap.to(s, { opacity: Math.random()*.6+.05, duration: Math.random()*4+2, repeat:-1, yoyo:true, delay:Math.random()*5 });
+  }
+})();
+
+/* ── TORCH FLICKER ── */
+gsap.to(['#fl1','#fl2'], { scaleY:1.4, scaleX:.7, opacity:.9, duration:.3, repeat:-1, yoyo:true, ease:'power1.inOut', stagger:.15 });
+
+/* ── FLOATING DUST PARTICLES ── */
+(function(){
+  for(let i=0;i<30;i++){
+    const p = document.createElement('div');
+    p.className = 'fp';
+    const sz = Math.random()*3+1;
+    p.style.cssText = `width:${sz}px;height:${sz}px;background:rgba(212,168,85,${Math.random()*.3+.05});left:${Math.random()*100}vw;top:${Math.random()*100}vh`;
+    document.body.appendChild(p);
+    gsap.to(p, { opacity:.4, duration:Math.random()*3+2, repeat:-1, yoyo:true, delay:Math.random()*4 });
+    gsap.to(p, { y: -(Math.random()*120+40), x:(Math.random()-.5)*80, duration:Math.random()*18+10, repeat:-1, ease:'none', delay:Math.random()*6 });
+  }
+})();
+
+/* ══════════════════════════
+   CANVAS ILLUSTRATIONS
+══════════════════════════ */
+function setupC(id){ const c=document.getElementById(id); const p=c.parentElement; c.width=p.offsetWidth; c.height=p.offsetHeight; return c; }
+
+/* --- C1: Kailash Gate at dawn --- */
+function drawKailash(canvas){
+  const ctx=canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+  let t=0;
+  (function loop(){ requestAnimationFrame(loop);
+    ctx.clearRect(0,0,W,H);
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#04030c'); bg.addColorStop(.5,'#0a0718'); bg.addColorStop(1,'#07050e');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    // Stars
+    for(let i=0;i<50;i++){
+      const a=.2+Math.sin(t*.002+i)*.15;
+      ctx.fillStyle=`rgba(220,210,180,${a})`;
+      ctx.fillRect((Math.sin(i*127.3)*.5+.5)*W, (Math.cos(i*93.7)*.5+.5)*H*.5, 1.5, 1.5);
+    }
+    // Mountain silhouettes
+    function peak(pts,col){ ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]); pts.forEach(p=>ctx.lineTo(p[0],p[1])); ctx.closePath(); ctx.fillStyle=col; ctx.fill(); }
+    peak([[0,H],[150,H*.35],[300,H]],            '#040310');
+    peak([[200,H],[380,H*.2],[560,H]],           '#060418');
+    peak([[400,H],[490,H*.1],[580,H]],           '#08061a');
+    peak([[550,H],[720,H*.28],[W,H]],            '#060418');
+    peak([[700,H],[850,H*.4],[W,H]],             '#040310');
+    // Snow
+    peak([[380,H*.2],[490,H*.1],[580,H*.2]],     'rgba(200,195,220,.12)');
+    // Gate
+    const gx=W/2, gy=H*.7;
+    ctx.fillStyle='#0b0820'; ctx.fillRect(gx-55,gy-50,110,70);
+    ctx.fillStyle='#0e0b28'; ctx.fillRect(gx-45,gy-45,90,65);
+    ctx.beginPath(); ctx.moveTo(gx-25,gy-50); ctx.lineTo(gx,gy-78); ctx.lineTo(gx+25,gy-50); ctx.fillStyle='#0b0820'; ctx.fill();
+    // Torch glow
+    const a=.12+Math.sin(t*.006)*.06;
+    ctx.fillStyle=`rgba(212,100,30,${a})`; ctx.beginPath(); ctx.arc(gx-60,gy-45,20,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=`rgba(212,100,30,${a})`; ctx.beginPath(); ctx.arc(gx+60,gy-45,20,0,Math.PI*2); ctx.fill();
+    // Garuda silhouette (right)
+    const gaX=W*.75, gaY=H*.65;
+    ctx.fillStyle='#0d0a1a';
+    ctx.beginPath(); ctx.ellipse(gaX,gaY,18,22,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(gaX-35,gaY-5,30,12,-.3,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(gaX+35,gaY-5,30,12,.3,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(gaX+8,gaY-28,10,0,Math.PI*2); ctx.fill();
+    // Parrot on tree (left)
+    const px=W*.22, py=H*.55;
+    ctx.strokeStyle='#1a1208'; ctx.lineWidth=4;
+    ctx.beginPath(); ctx.moveTo(px,py+30); ctx.bezierCurveTo(px-10,py,px+20,py-30,px-5,py-60); ctx.stroke();
+    // branch
+    ctx.beginPath(); ctx.moveTo(px-5,py-40); ctx.lineTo(px+40,py-35); ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle='rgba(30,100,55,.8)'; ctx.beginPath(); ctx.ellipse(px+25,py-50,8,10,-.2,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(25,85,45,.8)'; ctx.beginPath(); ctx.arc(px+31,py-58,6,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(140,30,30,.7)'; ctx.beginPath(); ctx.ellipse(px+30,py-63,3,2,0,0,Math.PI*2); ctx.fill();
+    // Ground mist
+    const mist=ctx.createLinearGradient(0,H*.75,0,H);
+    mist.addColorStop(0,'rgba(30,20,50,0)'); mist.addColorStop(1,'rgba(30,20,50,.4)');
+    ctx.fillStyle=mist; ctx.fillRect(0,H*.75,W,H*.25);
+    t+=16;
+  })();
+}
+
+/* --- C2: Yamraj arrives --- */
+function drawYama(canvas){
+  const ctx=canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+  let t=0;
+  (function loop(){ requestAnimationFrame(loop);
+    ctx.clearRect(0,0,W,H);
+    const bg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,W*.8);
+    bg.addColorStop(0,'#1a0505'); bg.addColorStop(.6,'#0d0303'); bg.addColorStop(1,'#060101');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    // Aura rings
+    for(let r=0;r<4;r++){
+      const a=.08+Math.sin(t*.001+r)*.04;
+      ctx.strokeStyle=`rgba(155,35,53,${a})`; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.arc(W*.38,H*.42,50+r*28,0,Math.PI*2); ctx.stroke();
+    }
+    const yx=W*.38, yy=H*.5;
+    // Crown glow
+    const cg=ctx.createRadialGradient(yx,yy-100,0,yx,yy-100,90);
+    cg.addColorStop(0,`rgba(200,60,40,${.2+Math.sin(t*.0015)*.08})`); cg.addColorStop(1,'rgba(200,60,40,0)');
+    ctx.fillStyle=cg; ctx.fillRect(0,0,W,H);
+    // Body
+    ctx.fillStyle='#0c0202';
+    ctx.beginPath(); ctx.ellipse(yx,yy+40,55,105,0,0,Math.PI*2); ctx.fill();
+    // Robe lines
+    for(let i=-2;i<=2;i++){
+      ctx.strokeStyle='rgba(80,15,15,.3)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(yx+i*15,yy-30); ctx.bezierCurveTo(yx+i*15+8,yy+40,yx+i*15-5,yy+90,yx+i*18,yy+155); ctx.stroke();
+    }
+    // Face
+    ctx.fillStyle='#1a0606'; ctx.beginPath(); ctx.ellipse(yx,yy-90,30,38,0,0,Math.PI*2); ctx.fill();
+    // Crown spikes
+    for(let i=0;i<9;i++){
+      const ang=(i/9)*Math.PI*2+t*.0004;
+      const r1=32, r2=55+Math.sin(t*.002+i)*4;
+      ctx.beginPath();
+      ctx.moveTo(yx+Math.cos(ang)*r1, yy-90+Math.sin(ang)*r1);
+      ctx.lineTo(yx+Math.cos(ang)*r2, yy-90+Math.sin(ang)*r2);
+      ctx.strokeStyle=`rgba(200,60,40,${.5+Math.sin(t*.003+i)*.2})`; ctx.lineWidth=2; ctx.stroke();
+    }
+    // Eyes
+    const ea=.7+Math.sin(t*.002)*.25;
+    ctx.fillStyle=`rgba(220,70,40,${ea})`;
+    ctx.beginPath(); ctx.ellipse(yx-11,yy-94,5,3,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(yx+11,yy-94,5,3,0,0,Math.PI*2); ctx.fill();
+    // The SURPRISED brow
+    ctx.strokeStyle=`rgba(220,170,100,${.4+Math.sin(t*.001)*.15})`; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(yx-14,yy-103); ctx.lineTo(yx-8,yy-108); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(yx+14,yy-103); ctx.lineTo(yx+8,yy-108); ctx.stroke();
+    // Staff
+    ctx.strokeStyle='#250808'; ctx.lineWidth=5;
+    ctx.beginPath(); ctx.moveTo(yx+50,yy-70); ctx.lineTo(yx+55,yy+160); ctx.stroke();
+    ctx.fillStyle='#1a0808'; ctx.beginPath(); ctx.arc(yx+50,yy-80,10,0,Math.PI*2); ctx.fill();
+    // Buffalo silhouette (right side, partial)
+    const bx=W*.75, by=H*.7;
+    ctx.fillStyle='#0a0202';
+    ctx.beginPath(); ctx.ellipse(bx,by,55,35,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(bx+50,by-20,20,18,0,0,Math.PI*2); ctx.fill();
+    // Horns
+    ctx.strokeStyle='#150505'; ctx.lineWidth=4;
+    ctx.beginPath(); ctx.moveTo(bx+55,by-30); ctx.bezierCurveTo(bx+70,by-55,bx+85,by-60,bx+90,by-50); ctx.stroke();
+    // Smoke
+    for(let i=0;i<15;i++){
+      const px=yx+(Math.sin(i*234+t*.0008)*90);
+      const py=yy+(Math.cos(i*178+t*.0006)*80)-20;
+      const a=.06+Math.sin(t*.002+i)*.03;
+      ctx.fillStyle=`rgba(155,35,53,${a})`;
+      ctx.beginPath(); ctx.arc(px,py,4+Math.sin(i+t*.001)*2,0,Math.PI*2); ctx.fill();
+    }
+    // Parrot (tiny, visible, startled-at)
+    const ppx=W*.72, ppy=H*.28;
+    ctx.fillStyle='rgba(30,100,55,.9)'; ctx.beginPath(); ctx.ellipse(ppx,ppy,7,9,-.2,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(ppx+5,ppy-10,5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(200,200,200,.9)'; ctx.beginPath(); ctx.arc(ppx+7,ppy-11,2,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#050505'; ctx.beginPath(); ctx.arc(ppx+7.5,ppy-11,1,0,Math.PI*2); ctx.fill();
+    // Arrow of gaze — from Yama eyes to parrot
+    ctx.strokeStyle=`rgba(220,70,40,${.15+Math.sin(t*.002)*.08})`; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(yx+20,yy-90); ctx.lineTo(ppx-10,ppy); ctx.stroke();
+    ctx.setLineDash([]);
+    t+=16;
+  })();
+}
+
+/* --- C3: Garuda flight --- */
+function drawFlight(canvas){
+  const ctx=canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+  let t=0;
+  (function loop(){ requestAnimationFrame(loop);
+    ctx.clearRect(0,0,W,H);
+    const sky=ctx.createLinearGradient(0,0,0,H);
+    sky.addColorStop(0,'#020508'); sky.addColorStop(.4,'#06101a'); sky.addColorStop(1,'#030a05');
+    ctx.fillStyle=sky; ctx.fillRect(0,0,W,H);
+    // Stars streaming
+    for(let i=0;i<30;i++){
+      const sx=((i*73+t*.6)%W);
+      const sy=(Math.sin(i*45)*.5+.5)*H*.6;
+      ctx.strokeStyle=`rgba(180,200,220,${.04+Math.sin(i)*.02})`; ctx.lineWidth=.5;
+      ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(sx-30,sy+2); ctx.stroke();
+    }
+    // Garuda — huge, dominant
+    const gx=W*.45, gy=H*.42;
+    const flap=Math.sin(t*.006)*1;
+    // Wing shadow / motion blur
+    for(let b=0;b<6;b++){
+      ctx.fillStyle=`rgba(180,140,20,${.04*(6-b)})`;
+      ctx.beginPath(); ctx.ellipse(gx-b*12,gy,W*.28,H*.2+flap*20,-.1,0,Math.PI*2); ctx.fill();
+    }
+    // Left wing
+    ctx.fillStyle='#a08010';
+    ctx.beginPath(); ctx.moveTo(gx-20,gy); ctx.bezierCurveTo(gx-80,gy-30+flap*30,gx-130,gy-10+flap*40,gx-W*.3,gy+10+flap*50);
+    ctx.bezierCurveTo(gx-120,gy+25,gx-60,gy+20,gx-18,gy+12); ctx.closePath(); ctx.fill();
+    // Right wing
+    ctx.beginPath(); ctx.moveTo(gx+20,gy); ctx.bezierCurveTo(gx+80,gy-30-flap*30,gx+130,gy-10-flap*40,gx+W*.3,gy+10-flap*50);
+    ctx.bezierCurveTo(gx+120,gy+25,gx+60,gy+20,gx+18,gy+12); ctx.closePath(); ctx.fill();
+    // Wing highlights
+    ctx.strokeStyle='rgba(220,180,40,.3)'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(gx-20,gy); ctx.bezierCurveTo(gx-80,gy-30+flap*30,gx-130,gy-10+flap*40,gx-W*.3,gy+10+flap*50); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(gx+20,gy); ctx.bezierCurveTo(gx+80,gy-30-flap*30,gx+130,gy-10-flap*40,gx+W*.3,gy+10-flap*50); ctx.stroke();
+    // Body
+    ctx.fillStyle='#c8a020';
+    ctx.beginPath(); ctx.ellipse(gx,gy,28,40,0,0,Math.PI*2); ctx.fill();
+    // Head
+    ctx.beginPath(); ctx.ellipse(gx+12,gy-50,20,22,0,0,Math.PI*2); ctx.fill();
+    // Beak
+    ctx.fillStyle='#e8b820';
+    ctx.beginPath(); ctx.moveTo(gx+30,gy-50); ctx.lineTo(gx+50,gy-46); ctx.lineTo(gx+30,gy-42); ctx.closePath(); ctx.fill();
+    // Eye
+    ctx.fillStyle='white'; ctx.beginPath(); ctx.arc(gx+17,gy-52,4,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#050505'; ctx.beginPath(); ctx.arc(gx+18,gy-52,2.5,0,Math.PI*2); ctx.fill();
+    // Cupped hands (parrot safe within)
+    ctx.fillStyle='#c8a020';
+    ctx.beginPath(); ctx.ellipse(gx-5,gy+35,18,12,.2,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(gx+10,gy+38,18,12,-.2,0,Math.PI*2); ctx.fill();
+    // Parrot peeking from hands
+    ctx.fillStyle='rgba(30,100,55,.95)'; ctx.beginPath(); ctx.arc(gx+3,gy+26,8,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='white'; ctx.beginPath(); ctx.arc(gx+6,gy+24,2.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#050505'; ctx.beginPath(); ctx.arc(gx+7,gy+24,1.5,0,Math.PI*2); ctx.fill();
+    // Tail feathers
+    ctx.fillStyle='#a07818';
+    ctx.beginPath(); ctx.moveTo(gx-15,gy+35); ctx.bezierCurveTo(gx-30,gy+55,gx-25,gy+70,gx-18,gy+80);
+    ctx.bezierCurveTo(gx-5,gy+65,gx+5,gy+70,gx+10,gy+80);
+    ctx.bezierCurveTo(gx+15,gy+65,gx+20,gy+55,gx+15,gy+38); ctx.closePath(); ctx.fill();
+    // Speed / wind trail
+    for(let f=0;f<8;f++){
+      const fx=gx-60-f*25+Math.sin(f*2+t*.003)*8;
+      const fy=gy-10+Math.cos(f*1.7+t*.002)*12;
+      ctx.strokeStyle=`rgba(200,170,50,${.15*(1-f/8)})`; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(fx,fy); ctx.lineTo(fx-20,fy+5); ctx.stroke();
+    }
+    // Horizon forest (far below)
+    ctx.fillStyle='rgba(5,10,5,.9)';
+    ctx.fillRect(0,H*.75,W,H*.25);
+    for(let i=0;i<25;i++){
+      const tx=(i/25)*W; const th=20+Math.sin(i*3.7)*8;
+      ctx.fillRect(tx,H*.75-th,W/25*.8,th);
+    }
+    t+=16;
+  })();
+}
+
+/* --- C4: Garuda questions Yama --- */
+function drawQuestion(canvas){
+  const ctx=canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+  let t=0;
+  (function loop(){ requestAnimationFrame(loop);
+    ctx.clearRect(0,0,W,H);
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#060410'); bg.addColorStop(1,'#09060c');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    // Atmospheric haze
+    const haze=ctx.createRadialGradient(W/2,H*.5,0,W/2,H*.5,W*.5);
+    haze.addColorStop(0,`rgba(60,20,60,${.06+Math.sin(t*.001)*.02})`); haze.addColorStop(1,'rgba(60,20,60,0)');
+    ctx.fillStyle=haze; ctx.fillRect(0,0,W,H);
+    // Ground
+    const grd=ctx.createLinearGradient(0,H*.75,0,H);
+    grd.addColorStop(0,'rgba(12,8,20,0)'); grd.addColorStop(1,'rgba(12,8,20,.7)');
+    ctx.fillStyle=grd; ctx.fillRect(0,H*.75,W,H*.25);
+    // Yama (left, darker, receding)
+    const yx=W*.25, yy=H*.5;
+    ctx.fillStyle='#0a0101';
+    ctx.beginPath(); ctx.ellipse(yx,yy+30,45,90,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(yx,yy-80,26,32,0,0,Math.PI*2); ctx.fill();
+    for(let i=0;i<7;i++){
+      const ang=(i/7)*Math.PI*2+t*.0003;
+      const r2=48+Math.sin(t*.002+i)*3;
+      ctx.strokeStyle=`rgba(155,35,53,${.25+Math.sin(t*.003+i)*.1})`; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(yx+Math.cos(ang)*28,yy-80+Math.sin(ang)*28); ctx.lineTo(yx+Math.cos(ang)*r2,yy-80+Math.sin(ang)*r2); ctx.stroke();
+    }
+    // Eye glow
+    const ea=.5+Math.sin(t*.002)*.2;
+    ctx.fillStyle=`rgba(200,60,40,${ea})`; ctx.beginPath(); ctx.ellipse(yx-9,yy-83,4,3,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(yx+9,yy-83,4,3,0,0,Math.PI*2); ctx.fill();
+    // Garuda (right, bowing slightly)
+    const gx=W*.68, gy=H*.48;
+    ctx.fillStyle='#a08010';
+    // wings folded (respectful)
+    ctx.beginPath(); ctx.ellipse(gx-45,gy+10,35,15,-.4,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(gx+45,gy+10,35,15,.4,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#c8a020';
+    ctx.beginPath(); ctx.ellipse(gx,gy,24,36,.15,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(gx+10,gy-46,18,20,.15,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#e8b820';
+    ctx.beginPath(); ctx.moveTo(gx+26,gy-46); ctx.lineTo(gx+44,gy-42); ctx.lineTo(gx+26,gy-40); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='white'; ctx.beginPath(); ctx.arc(gx+14,gy-48,3,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#050505'; ctx.beginPath(); ctx.arc(gx+15,gy-48,2,0,Math.PI*2); ctx.fill();
+    // Speech line between them
+    const speechA=.15+Math.sin(t*.003)*.08;
+    ctx.strokeStyle=`rgba(212,168,85,${speechA})`; ctx.lineWidth=1; ctx.setLineDash([3,6]);
+    ctx.beginPath(); ctx.moveTo(yx+50,yy-70); ctx.bezierCurveTo(W*.45,yy-100,W*.5,gy-50,gx-30,gy-40); ctx.stroke();
+    ctx.setLineDash([]);
+    // Empty branch (parrot gone)
+    ctx.strokeStyle='#1a1208'; ctx.lineWidth=4;
+    ctx.beginPath(); ctx.moveTo(W*.48,H*.3); ctx.lineTo(W*.62,H*.28); ctx.stroke();
+    ctx.fillStyle='rgba(212,168,85,.2)';
+    ctx.beginPath(); ctx.arc(W*.56,H*.25,3,0,Math.PI*2); ctx.fill();
+    const dimText=ctx.createRadialGradient(W*.56,H*.25,0,W*.56,H*.25,30);
+    dimText.addColorStop(0,`rgba(212,168,85,${.08+Math.sin(t*.0015)*.04})`); dimText.addColorStop(1,'rgba(212,168,85,0)');
+    ctx.fillStyle=dimText; ctx.beginPath(); ctx.arc(W*.56,H*.25,30,0,Math.PI*2); ctx.fill();
+    t+=16;
+  })();
+}
+
+/* --- C5: The python / destiny --- */
+function drawPython(canvas){
+  const ctx=canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+  let t=0;
+  (function loop(){ requestAnimationFrame(loop);
+    ctx.clearRect(0,0,W,H);
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#030804'); bg.addColorStop(.5,'#060f06'); bg.addColorStop(1,'#040a04');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    // Dense forest
+    for(let i=0;i<20;i++){
+      const tx=(i/19)*W;
+      ctx.fillStyle=`rgba(5,${12+Math.sin(i)*.5|0},5,.9)`;
+      ctx.fillRect(tx-15,0,30,H*.8);
+      ctx.fillStyle='rgba(8,18,8,.85)'; ctx.beginPath();
+      ctx.arc(tx,Math.sin(i*2.3)*20+H*.25,25+Math.cos(i*1.7)*10,0,Math.PI*2); ctx.fill();
+    }
+    // Cliff / rock face
+    ctx.fillStyle='#0c0a0e';
+    ctx.beginPath(); ctx.moveTo(W*.3,0); ctx.lineTo(W*.3,H); ctx.lineTo(W,H); ctx.lineTo(W,0); ctx.closePath(); ctx.fill();
+    // Rock texture lines
+    ctx.strokeStyle='rgba(50,40,60,.4)'; ctx.lineWidth=1;
+    for(let r=0;r<8;r++){
+      ctx.beginPath(); ctx.moveTo(W*.3,r*(H/8)); ctx.bezierCurveTo(W*.5,r*(H/8)+20,W*.7,r*(H/8)-10,W,r*(H/8)+5); ctx.stroke();
+    }
+    // Crevice
+    const crevX=W*.48, crevY=H*.55;
+    ctx.fillStyle='#050305';
+    ctx.beginPath(); ctx.ellipse(crevX,crevY,35,22,0,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='rgba(30,20,40,.6)'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.ellipse(crevX,crevY,35,22,0,0,Math.PI*2); ctx.stroke();
+    // Python emerging from crevice
+    const pScale=.6+Math.sin(t*.001)*.04;
+    ctx.save(); ctx.translate(crevX,crevY); ctx.scale(pScale,pScale);
+    ctx.strokeStyle='#3a4a20'; ctx.lineWidth=18;
+    ctx.lineCap='round';
+    // Coiled body
+    ctx.beginPath();
+    ctx.moveTo(-10,0); ctx.bezierCurveTo(-20,20,-5,50,15,40); ctx.bezierCurveTo(35,30,40,10,30,-10);
+    ctx.bezierCurveTo(20,-30,0,-20,-10,0);
+    ctx.stroke();
+    // Head
+    ctx.fillStyle='#3a4a20'; ctx.beginPath(); ctx.ellipse(30,-15,14,10,.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(200,60,30,.9)'; ctx.beginPath(); ctx.arc(38,-17,4,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(0,200,100,.4)'; ctx.beginPath(); ctx.arc(39,-16,2,0,Math.PI*2); ctx.fill();
+    // Tongue
+    ctx.strokeStyle='rgba(200,30,30,.8)'; ctx.lineWidth=1.5;
+    const ta=t*.008;
+    ctx.beginPath(); ctx.moveTo(50,-13); ctx.lineTo(58,-12+Math.sin(ta)*2); ctx.moveTo(58,-12+Math.sin(ta)*2); ctx.lineTo(62,-10+Math.sin(ta)*3); ctx.moveTo(58,-12+Math.sin(ta)*2); ctx.lineTo(62,-14+Math.sin(ta)*3); ctx.stroke();
+    ctx.restore();
+    // Parrot — fallen near crevice, motionless
+    ctx.fillStyle='rgba(20,80,40,.6)';
+    ctx.save(); ctx.translate(crevX-40,crevY+20); ctx.rotate(.4);
+    ctx.beginPath(); ctx.ellipse(0,0,12,7,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(12,-5,5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(120,20,20,.5)'; ctx.beginPath(); ctx.ellipse(12,-9,2.5,1.5,0,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+    // Destiny glow
+    const dg=ctx.createRadialGradient(crevX,crevY,0,crevX,crevY,100);
+    dg.addColorStop(0,`rgba(155,35,53,${.08+Math.sin(t*.001)*.04})`); dg.addColorStop(1,'rgba(155,35,53,0)');
+    ctx.fillStyle=dg; ctx.fillRect(0,0,W,H);
+    t+=16;
+  })();
+}
+
+/* --- C6: Garuda alone, at the gate --- */
+function drawAlone(canvas){
+  const ctx=canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+  let t=0;
+  (function loop(){ requestAnimationFrame(loop);
+    ctx.clearRect(0,0,W,H);
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#04030c'); bg.addColorStop(.5,'#080615'); bg.addColorStop(1,'#06040e');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    // Kailash mountain silhouette (background)
+    ctx.fillStyle='#060416'; ctx.beginPath();
+    ctx.moveTo(0,H); ctx.lineTo(200,H*.3); ctx.lineTo(350,H*.1); ctx.lineTo(W*.55,H*.05); ctx.lineTo(700,H*.25); ctx.lineTo(W,H*.4); ctx.lineTo(W,H); ctx.closePath(); ctx.fill();
+    // Stars
+    for(let i=0;i<60;i++){
+      const a=.15+Math.sin(t*.0015+i)*.1;
+      ctx.fillStyle=`rgba(220,210,195,${a})`;
+      ctx.fillRect((Math.sin(i*127.3)*.5+.5)*W,(Math.cos(i*93.7)*.5+.5)*H*.6,1.5,1.5);
+    }
+    // Golden glow — the divine light Garuda serves
+    const gl=ctx.createRadialGradient(W*.55,H*.05,10,W*.55,H*.05,200);
+    gl.addColorStop(0,`rgba(212,168,85,${.08+Math.sin(t*.001)*.04})`); gl.addColorStop(1,'rgba(212,168,85,0)');
+    ctx.fillStyle=gl; ctx.fillRect(0,0,W,H);
+    // Gate
+    const gate_x=W*.55, gate_y=H*.65;
+    ctx.fillStyle='#0a0720'; ctx.fillRect(gate_x-60,gate_y-55,120,75);
+    ctx.fillStyle='#0d0a28'; ctx.fillRect(gate_x-50,gate_y-50,100,70);
+    ctx.beginPath(); ctx.moveTo(gate_x-28,gate_y-55); ctx.lineTo(gate_x,gate_y-85); ctx.lineTo(gate_x+28,gate_y-55); ctx.fillStyle='#0a0720'; ctx.fill();
+    // Pillar
+    ctx.fillStyle='#0d0a1c'; ctx.fillRect(gate_x-120,gate_y-40,16,50);
+    // Garuda seated on pillar — wings folded, still, contemplative
+    const gx=gate_x-112, gy=gate_y-55;
+    ctx.fillStyle='#9a7a18';
+    // Folded wings
+    ctx.beginPath(); ctx.ellipse(gx-25,gy+15,25,12,-.5,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(gx+25,gy+15,25,12,.5,0,Math.PI*2); ctx.fill();
+    // Body
+    ctx.fillStyle='#c8a020'; ctx.beginPath(); ctx.ellipse(gx,gy+10,20,30,.1,0,Math.PI*2); ctx.fill();
+    // Head — bowed slightly
+    ctx.beginPath(); ctx.ellipse(gx+5,gy-25,16,18,.2,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#e8b820';
+    ctx.beginPath(); ctx.moveTo(gx+18,gy-26); ctx.lineTo(gx+34,gy-24); ctx.lineTo(gx+18,gy-21); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='white'; ctx.beginPath(); ctx.arc(gx+10,gy-27,3,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#050505'; ctx.beginPath(); ctx.arc(gx+11,gy-27,2,0,Math.PI*2); ctx.fill();
+    // The empty tree — once had the parrot
+    const tx=gate_x+80, ty=gate_y-60;
+    ctx.strokeStyle='#15100a'; ctx.lineWidth=4;
+    ctx.beginPath(); ctx.moveTo(tx,gate_y+10); ctx.bezierCurveTo(tx-8,ty+20,tx+10,ty-10,tx-5,ty-30); ctx.stroke();
+    ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(tx-5,ty-10); ctx.lineTo(tx+40,ty-5); ctx.stroke();
+    // Empty branch — just a faint ghost shimmer where parrot was
+    const ghost=.05+Math.sin(t*.0015)*.03;
+    ctx.fillStyle=`rgba(30,100,55,${ghost})`;
+    ctx.beginPath(); ctx.ellipse(tx+22,ty-16,8,10,-.2,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(tx+28,ty-24,6,0,Math.PI*2); ctx.fill();
+    // Ground mist
+    const mist=ctx.createLinearGradient(0,H*.78,0,H);
+    mist.addColorStop(0,'rgba(20,12,40,0)'); mist.addColorStop(1,'rgba(20,12,40,.5)');
+    ctx.fillStyle=mist; ctx.fillRect(0,H*.78,W,H*.22);
+    // Floating light motes
+    for(let i=0;i<10;i++){
+      const mx=gx+(Math.sin(i*2.3+t*.0008)*30);
+      const my=gy+(Math.cos(i*1.7+t*.0006)*30)-20;
+      const ma=.04+Math.sin(t*.002+i)*.03;
+      ctx.fillStyle=`rgba(212,168,85,${ma})`;
+      ctx.beginPath(); ctx.arc(mx,my,1.5,0,Math.PI*2); ctx.fill();
+    }
+    t+=16;
+  })();
+}
+
+const canvasMap = [
+  ['c1',drawKailash], ['c2',drawYama], ['c3',drawFlight],
+  ['c4',drawQuestion], ['c5',drawPython], ['c6',drawAlone]
+];
+
+/* ══════════════════════════
+   PRELOADER
+══════════════════════════ */
+gsap.timeline({
+  onComplete: () => {
+    gsap.to('#loader',{ opacity:0, duration:1.2, delay:.4,
+      onComplete: () => { document.getElementById('loader').style.display='none'; startPage(); }
+    });
+  }
+})
+.to('.load-symbol',{ opacity:1, filter:'blur(0px)', duration:1.6, ease:'power2.out' })
+.to('.load-bar',   { width:'280px', duration:1.1, ease:'power2.inOut' }, '-=0.4')
+.to('.load-text',  { opacity:1, duration:1, ease:'power2.out' }, '-=0.4')
+.to('.load-symbol',{ scale:1.08, duration:.5, yoyo:true, repeat:1, ease:'sine.inOut' })
+.to('.load-bar',   { scaleX:0, duration:.7, ease:'power2.in' });
+
+/* ══════════════════════════
+   PAGE START
+══════════════════════════ */
+function startPage(){
+  // Hero entrance
+  gsap.timeline({ delay:.2 })
+    .to('.h-eyebrow', { opacity:1, y:0, duration:.9, ease:'power3.out', from:{y:15} })
+    .from('.h-title',  { opacity:0, y:35, duration:1.1, ease:'power3.out' }, '-=.3')
+    .to('.h-title', { opacity:1, duration:0 }, '<')
+    .from('.h-sub',    { opacity:0, y:20, duration:1,   ease:'power2.out' }, '-=.4')
+    .to('.h-sub', { opacity:1, duration:0 }, '<')
+    .to('.h-rule',     { opacity:1, duration:.7, ease:'power2.out' }, '-=.2')
+    .to('.scroll-down',{ opacity:1, duration:.7, ease:'power2.out' }, '-=.2')
+    .to('.hero-kailash',{ opacity:1, duration:2.5, ease:'power2.out' }, '-=1.5');
+
+  /* ── Chapter dividers ── */
+  ['cd1','cd2','cd3','cd4','cd5','cd6'].forEach(id => {
+    const el = document.getElementById(id);
+    ScrollTrigger.create({ trigger:el, start:'top 80%', once:true, onEnter:()=>{
+      gsap.to(el.querySelectorAll('.cdiv-line'),  { opacity:1, width:'200px', duration:1,   ease:'power2.out', stagger:.2 });
+      gsap.to(el.querySelector('.cdiv-label'),    { opacity:1, duration:.8, delay:.3, ease:'power2.out' });
+    }});
+  });
+
+  /* ── Scene animations + canvas init ── */
+  document.querySelectorAll('.scene').forEach((scene, i) => {
+    const tag   = scene.querySelector('.s-tag');
+    const illus = scene.querySelector('.illus');
+    const pq    = scene.querySelector('.pq');
+    const bt    = scene.querySelector('.bt');
+    const rev   = scene.querySelector('.revelation');
+    const canvasEl = scene.querySelector('canvas');
+
+    // Canvas lazy init
+    if(canvasEl) ScrollTrigger.create({ trigger:illus, start:'top 85%', once:true, onEnter:()=>{
+      const c = setupC(canvasEl.id);
+      canvasMap[i][1](c);
+    }});
+
+    // Content entrance
+    ScrollTrigger.create({ trigger:scene, start:'top 72%', once:true, onEnter:()=>{
+      const tl = gsap.timeline();
+      tl.to(tag,   { opacity:1, x:0, duration:.7, ease:'power2.out', from:{x:-20} })
+        .to(illus,  { opacity:1, duration:1.1, ease:'power2.out' }, '-=.3')
+        .to(pq,     { opacity:1, y:0, duration:.9, ease:'power2.out', from:{y:25} }, '-=.4')
+        .to(bt,     { opacity:1, y:0, duration:.9, ease:'power2.out', from:{y:18} }, '-=.4');
+      if(rev) tl.to(rev, { opacity:1, duration:.8, ease:'power2.out' }, '-=.2');
+    }});
+
+    // Parallax
+    if(illus) gsap.to(illus, { yPercent:-12, ease:'none', scrollTrigger:{
+      trigger:scene, start:'top bottom', end:'bottom top', scrub:true
+    }});
+  });
+
+  /* ── Moral section ── */
+  ScrollTrigger.create({ trigger:'#moral', start:'top 70%', once:true, onEnter:()=>{
+    gsap.to('.moral-title', { opacity:1, duration:.8, ease:'power2.out' });
+    const mq = document.getElementById('mq');
+    gsap.to(mq, { opacity:1, duration:.1 });
+    gsap.to(mq.querySelectorAll('.line span'), {
+      y:0, duration:1.1, stagger:.22, ease:'power3.out', delay:.3
+    });
+    gsap.to('#mb', { opacity:1, duration:1.2, delay:1.8, ease:'power2.out' });
+  }});
+
+  // Moral glow
+  gsap.to('.moral-glow', { opacity:.7, scale:1.3, duration:5, yoyo:true, repeat:-1, ease:'sine.inOut' });
+
+  // Scene 5 revelation flash
+  ScrollTrigger.create({ trigger:'#s5', start:'top 45%', once:true, onEnter:()=>{
+    const rev = document.querySelector('#s5 .revelation');
+    if(rev) gsap.from(rev,{ borderColor:'rgba(155,35,53,.8)', duration:.6, ease:'power2.out' });
+  }});
+}
+
+window.addEventListener('resize', ()=> ScrollTrigger.refresh());
+</script>
+</body>
+</html>
